@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เว็บสอนทำข้อสอบ สถาปัตยกรรมคอมพิวเตอร์ (Computer Architecture Exam Guide)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- TOP HEADER / NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <i class="fa-solid fa-microchip text-xl"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg sm:text-xl tracking-tight leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
+              198322 Computer Architecture
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">คู่มือสอนทำข้อสอบอย่างละเอียด พร้อม Interactive Simulator</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="สลับโหมดมืด/สว่าง">
+            <i class="fa-solid fa-moon dark:hidden"></i>
+            <i class="fa-solid fa-sun hidden dark:inline"></i>
+          </button>
+          <a href="#quiz-section" onclick="switchTab('quiz')" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium text-sm shadow-sm hover:shadow hover:opacity-95 transition">
+            <i class="fa-solid fa-graduation-cap"></i> ทดสอบตัวเอง
+          </a>
+        </div>
+      </div>
+
+      <!-- MAIN TABS NAVIGATION -->
+      <div class="flex items-center gap-1.5 overflow-x-auto py-2.5 no-scrollbar text-sm font-medium border-t border-slate-100 dark:border-slate-800/60">
+        <button onclick="switchTab('overview')" class="nav-tab active px-3.5 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-2" id="tab-overview">
+          <i class="fa-solid fa-compass"></i> ภาพรวมข้อสอบ
+        </button>
+        <button onclick="switchTab('q1')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q1">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">1</span>
+          ข้อ 1: 4-bit Arithmetic & Overflow
+        </button>
+        <button onclick="switchTab('q2')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q2">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">2</span>
+          ข้อ 2: ALU Control Logic Table
+        </button>
+        <button onclick="switchTab('q3')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q3">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">3</span>
+          ข้อ 3: Multicycle 3-State Machine
+        </button>
+        <button onclick="switchTab('q4')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q4">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">4</span>
+          ข้อ 4: SRL Datapath & Barrel Shifter
+        </button>
+        <button onclick="switchTab('q5')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q5">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">5</span>
+          ข้อ 5: 5-Stage Pipeline Hazards
+        </button>
+        <button onclick="switchTab('q6')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2" id="tab-q6">
+          <span class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 text-xs flex items-center justify-center font-bold">6</span>
+          ข้อ 6: Pipeline Control Signal Propagation
+        </button>
+        <button onclick="switchTab('quiz')" class="nav-tab px-3.5 py-1.5 rounded-lg whitespace-nowrap text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 text-amber-600 dark:text-amber-400 font-semibold" id="tab-quiz">
+          <i class="fa-solid fa-circle-question"></i> Quiz โหมดทดสอบ
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN BODY CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB: OVERVIEW & BLUEPRINT -->
+    <!-- ========================================== -->
+    <section id="content-overview" class="tab-content space-y-8">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-700 via-indigo-700 to-slate-900 text-white p-8 sm:p-10 shadow-2xl">
+        <div class="relative z-10 max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md mb-4 text-blue-100">
+            <i class="fa-solid fa-award"></i> สรุปข้อสอบครั้งที่ 2 วิชา 198322 สถาปัตยกรรมคอมพิวเตอร์ (KKU)
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+            คู่มือเจาะลึกข้อสอบสถาปัตยกรรมคอมพิวเตอร์
+          </h2>
+          <p class="text-base sm:text-lg text-blue-100/90 leading-relaxed font-light mb-6">
+            เข้าใจตั้งแต่รากฐานของระบบตัวเลขคอมพิวเตอร์ การคำนวณบิต การเกิด Overflow ไปจนถึงการออกแบบ ALU, Multicycle Datapath, วงจร Barrel Shifter และการทำงานของ 5-Stage Pipeline อย่างเป็นขั้นเป็นตอนพร้อมสื่อจำลอง Interactive
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="switchTab('q1')" class="px-5 py-2.5 rounded-xl bg-white text-blue-700 font-semibold hover:bg-blue-50 transition shadow-md flex items-center gap-2">
+              <i class="fa-solid fa-play"></i> เริ่มติวข้อที่ 1
+            </button>
+            <button onclick="switchTab('quiz')" class="px-5 py-2.5 rounded-xl bg-blue-600/60 hover:bg-blue-600 text-white font-medium border border-white/20 transition flex items-center gap-2">
+              <i class="fa-solid fa-list-check"></i> ลองทำแบบทดสอบ
+            </button>
+          </div>
+        </div>
+        <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none text-9xl">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+      </div>
+
+      <!-- Quick Summary Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q1')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">1</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">พีชคณิตคอมพิวเตอร์ 4-bit & Overflow</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Signed vs Unsigned Addition, ทำไมเครื่องหมายจึงเปลี่ยน, นิยาม Overflow เชิงคณิตศาสตร์และระดับฮาร์ดแวร์ ($C_{in} \oplus C_{out}$).
+          </p>
+          <div class="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q2')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg">2</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">ตารางสัญญาณควบคุม ALU (ALU Control)</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            วิเคราะห์ 1-bit ALU 31 บิตแรก และ ALU31 MSB, กำหนดสัญญาณ Ainv, Binv, CarryIn, Operation สำหรับ add, sub, and, or, nor, slt.
+          </p>
+          <div class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q3')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-lg">3</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">Multicycle Machine (3-State Machine)</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            เติมสัญญาณ State 0, 1, 2 สำหรับคำสั่ง j, beq, R-type, lw, sw พร้อมตาราง Main Control Signal Active-High 14 ช่องสัญญาณ.
+          </p>
+          <div class="text-sm font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q4')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg">4</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">SRL Datapath & Barrel Shifter Wiring</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            โยงสายสัญญาณฮาร์ดแวร์ IR, Barrel Shifter, Register File สำหรับคำสั่ง <code>srl rd, rt, shamt</code> ระบุบิตชัดเจนไม่คลุมเครือ.
+          </p>
+          <div class="text-sm font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q5')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-lg">5</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">5-Stage Pipeline Hazards & Performance</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            คำนวณเวลาการรัน $N$ คำสั่ง, วิเคราะห์ Structural, Data (RAW), Control Hazard, วิธีการแก้: Forwarding, Stall, Scheduling, Branch Prediction.
+          </p>
+          <div class="text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition cursor-pointer border border-slate-200 dark:border-slate-800" onclick="switchTab('q6')">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold text-lg">6</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">10 คะแนน</span>
+          </div>
+          <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">การส่งผ่านสัญญาณควบคุมใน Pipeline</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            ไขข้อข้องใจว่าทำไม Control Unit อยู่ที่ ID stage ชุดเดียว แต่สั่งการ stage EX, MEM, WB ในอนาคตได้อย่างถูกต้องแม่นยำ.
+          </p>
+          <div class="text-sm font-semibold text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5">
+            เรียนรู้ข้อนี้ <i class="fa-solid fa-arrow-right text-xs"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 1 (ARITHMETIC & OVERFLOW) -->
+    <!-- ========================================== -->
+    <section id="content-q1" class="tab-content hidden space-y-8">
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300">
+            คำถามที่ 1 (10 คะแนน - ไม่มี Partial Credit)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            4-Bit Computer Arithmetic & Overflow
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="scrollToSimulator('q1')" class="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 text-xs font-semibold flex items-center gap-1.5 hover:bg-blue-100 transition">
+            <i class="fa-solid fa-calculator"></i> ไปที่เครื่องคิดเลขจำลอง
+          </button>
+        </div>
+      </div>
+
+      <!-- Theory Box: OVERFLOW EXPLAINED -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-blue-600 space-y-5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">ทฤษฎีสำคัญ: ทำไมเกิด Overflow? ดูอย่างไรให้แม่น 100%</h3>
+        </div>
+
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+          ในระบบ 4 บิต คอมพิวเตอร์สามารถแทนค่าตัวเลขได้เพียง $2^4 = 16$ สถานะเท่านั้น โดยแบ่งเป็น 2 รูปแบบหลัก:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Unsigned Card -->
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-hashtag"></i> 1. Unsigned (ไม่มีเครื่องหมาย)
+            </h4>
+            <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+              <li>• ช่วงค่าที่เก็บได้: <strong>0 ถึง 15</strong> ($[0, 2^n - 1]$)</li>
+              <li>• บิตทุกตัวคือค่าน้ำหนักบวก ($2^3, 2^2, 2^1, 2^0$)</li>
+              <li>• <span class="text-rose-500 font-semibold">กฎการเกิด Overflow:</span> จะเกิดเมื่อผลรวมทางคณิตศาสตร์ <strong>เกิน 15</strong></li>
+              <li>• <strong>ดูง่ายๆ ในระดับบิต:</strong> มี <strong>Carry out (ตัวทดหลุดออกจากบิตสูงสุด MSB)</strong> หรือไม่? ถ้ามี Carry out = 1 $\implies$ <span class="text-rose-500 font-bold">Overflow = True!</span></li>
+            </ul>
+          </div>
+
+          <!-- Signed Card -->
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-plus-minus"></i> 2. Signed (Two's Complement)
+            </h4>
+            <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+              <li>• ช่วงค่าที่เก็บได้: <strong>-8 ถึง +7</strong> ($[-2^{n-1}, 2^{n-1} - 1]$)</li>
+              <li>• บิต MSB (บิตซ้ายสุด) มีค่าน้ำหนักเป็น <strong>$-2^3 = -8$</strong> (แสดงเครื่องหมาย: 0=บวก, 1=ลบ)</li>
+              <li>• <span class="text-rose-500 font-semibold">กฎเหล็กการเกิด Overflow:</span> เครื่องหมายของผลลัพธ์ <strong>ขัดกับหลักตรรกะทางคณิตศาสตร์</strong>:
+                <div class="mt-1 pl-2 border-l-2 border-rose-300 dark:border-rose-700 space-y-1">
+                  <div>🔸 <strong>(บวก) + (บวก) แล้วได้ผลลัพธ์เป็น (ลบ)</strong> (MSB: $0 + 0 \to 1$) $\implies$ <span class="text-rose-500 font-bold">Overflow!</span></div>
+                  <div>🔸 <strong>(ลบ) + (ลบ) แล้วได้ผลลัพธ์เป็น (บวก)</strong> (MSB: $1 + 1 \to 0$) $\implies$ <span class="text-rose-500 font-bold">Overflow!</span></div>
+                  <div>🔹 <strong>(บวก) + (ลบ)</strong> $\implies$ <span class="text-emerald-500 font-bold">ไม่มีวันเกิด Overflow เด็ดขาด!</span> เพราะค่าอยู่ระหว่างสองตัวเสมอ</div>
+                </div>
+              </li>
+              <li>• <strong>สูตรฮาร์ดแวร์เช็ค Overflow:</strong> $V = C_{in} \oplus C_{out}$ (Carry เข้า MSB ต้องเท่ากับ Carry ออกจาก MSB ถ้าไม่เท่ากันคือ Overflow)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 4-Bit Calculator & Overflow Tool -->
+      <div id="sim-q1" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-blue-600"></i> เครื่องมือทดลองบวก 4-Bit Binary & ตรวจสอบ Overflow สดๆ
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">คลิกที่บิตเพื่อสลับ 0/1 หรือเลือกข้อสอบจากปุ่มด่วนด้านล่างเพื่อดูผลทันที</p>
+          </div>
+          <!-- Mode Switch -->
+          <div class="inline-flex rounded-xl p-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <button id="calc-signed-btn" onclick="setCalcMode('signed')" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-blue-600 text-blue-600 dark:text-white shadow-sm transition">Signed Mode</button>
+            <button id="calc-unsigned-btn" onclick="setCalcMode('unsigned')" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 transition">Unsigned Mode</button>
+          </div>
+        </div>
+
+        <!-- Quick Presets from Exam -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="font-semibold text-slate-500">เลือกโจทย์จากข้อสอบ:</span>
+          <button onclick="loadQ1Preset(0)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.1 (Signed 2+4)</button>
+          <button onclick="loadQ1Preset(1)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.2 (Unsigned 2+4)</button>
+          <button onclick="loadQ1Preset(2)" class="px-2.5 py-1 rounded-md bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 font-mono font-bold">1.3 (Signed 5+6) 💥</button>
+          <button onclick="loadQ1Preset(3)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.4 (Unsigned 5+6)</button>
+          <button onclick="loadQ1Preset(4)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.5 (Signed -1+-5)</button>
+          <button onclick="loadQ1Preset(5)" class="px-2.5 py-1 rounded-md bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 font-mono font-bold">1.6 (Signed -7+-5) 💥</button>
+          <button onclick="loadQ1Preset(6)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.7 (Signed -7+3)</button>
+          <button onclick="loadQ1Preset(7)" class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 border border-slate-200 dark:border-slate-700 font-mono">1.8 (Signed 7+-8)</button>
+        </div>
+
+        <!-- Interactive Bit Controls -->
+        <div class="bg-slate-50 dark:bg-slate-900/80 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <!-- Left: Inputs -->
+            <div class="space-y-5">
+              <!-- Operand 1 -->
+              <div>
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-1.5">
+                  <span>Operand 1: <span id="op1-decimal" class="text-blue-600 font-bold text-sm"></span></span>
+                  <span class="font-mono">Bit 3(MSB) ... Bit 0(LSB)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400 font-mono font-bold text-sm">0b</span>
+                  <button id="op1-b3" onclick="toggleBit('op1', 3)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                  <button id="op1-b2" onclick="toggleBit('op1', 2)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                  <button id="op1-b1" onclick="toggleBit('op1', 1)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-1">1</button>
+                  <button id="op1-b0" onclick="toggleBit('op1', 0)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                </div>
+              </div>
+
+              <!-- Operator Sign -->
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-600 dark:text-slate-200">
+                  <i class="fa-solid fa-plus"></i>
+                </div>
+                <span class="text-xs text-slate-400">Addition (การบวก)</span>
+              </div>
+
+              <!-- Operand 2 -->
+              <div>
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-1.5">
+                  <span>Operand 2: <span id="op2-decimal" class="text-indigo-600 font-bold text-sm"></span></span>
+                  <span class="font-mono">Bit 3(MSB) ... Bit 0(LSB)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400 font-mono font-bold text-sm">0b</span>
+                  <button id="op2-b3" onclick="toggleBit('op2', 3)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                  <button id="op2-b2" onclick="toggleBit('op2', 2)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-1">1</button>
+                  <button id="op2-b1" onclick="toggleBit('op2', 1)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                  <button id="op2-b0" onclick="toggleBit('op2', 0)" class="bit-btn w-12 h-12 rounded-xl border font-mono font-bold text-lg flex items-center justify-center bit-0">0</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Live Result Display -->
+            <div class="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-4">
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">ผลการคำนวณแบบ Real-time</div>
+              
+              <!-- Result in 4 bits -->
+              <div>
+                <span class="text-xs text-slate-500">Result (in 4 bits):</span>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="font-mono text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400 tracking-wider" id="res-binary">0110</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-mono" id="res-dec-tag">ค่าทศนิยม: +6</span>
+                </div>
+              </div>
+
+              <!-- Carry Out / Overflow Badges -->
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60 flex flex-wrap items-center gap-3">
+                <div>
+                  <span class="text-xs text-slate-500 block">Carry Out (หลุด 4 บิต):</span>
+                  <span id="badge-carry" class="inline-block mt-0.5 px-2.5 py-1 rounded-md text-xs font-bold font-mono bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">0</span>
+                </div>
+                <div>
+                  <span class="text-xs text-slate-500 block">สถานะ Overflow:</span>
+                  <span id="badge-overflow" class="inline-block mt-0.5 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400">False</span>
+                </div>
+              </div>
+
+              <!-- Reason Box -->
+              <div id="overflow-reason-box" class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-xs text-blue-900 dark:text-blue-200 leading-relaxed border border-blue-200 dark:border-blue-900/60">
+                บวกปกติ ค่าผลลัพธ์อยู่ในช่วง ไม่เกิด overflow
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete Exam Table Solution with In-Depth Explanation -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-table-list text-emerald-600"></i> ตารางเฉลยข้อ 1 ทุกข้อย่อย พร้อมวิธีคิดบิตต่อบิต
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700">
+                <th class="py-3 px-4 font-bold">ข้อ</th>
+                <th class="py-3 px-4 font-bold">Arithmetic operation</th>
+                <th class="py-3 px-4 font-bold">Operand 1</th>
+                <th class="py-3 px-4 font-bold">Operand 2</th>
+                <th class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">Result (in 4 bits)</th>
+                <th class="py-3 px-4 font-bold text-center">Overflow</th>
+                <th class="py-3 px-4 font-bold">คำอธิบายเหตุผลอย่างละเอียด (ทำไมถึง True/False)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-mono">
+              <!-- 1.1 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.1</td>
+                <td class="py-3 px-4 font-sans font-medium">Signed Addition</td>
+                <td class="py-3 px-4">0b0010 (+2)</td>
+                <td class="py-3 px-4">0b0100 (+4)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">0110</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $(+2) + (+4) = +6$ ค่าอยู่ในช่วง $[-8, 7]$ เครื่องหมายบวก+บวกได้บวก (MSB=0) ไม่เกิด Overflow
+                </td>
+              </tr>
+              <!-- 1.2 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.2</td>
+                <td class="py-3 px-4 font-sans font-medium">Unsigned Addition</td>
+                <td class="py-3 px-4">0b0010 (2)</td>
+                <td class="py-3 px-4">0b0100 (4)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">0110</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $2 + 4 = 6$ ค่าอยู่ในช่วง $[0, 15]$ และไม่มี Carry out ($C_{out}=0$) ไม่เกิด Overflow
+                </td>
+              </tr>
+              <!-- 1.3 -->
+              <tr class="hover:bg-rose-50/50 dark:hover:bg-rose-950/20 bg-rose-50/20 dark:bg-rose-950/10">
+                <td class="py-3 px-4 font-bold text-rose-600 dark:text-rose-400">1.3</td>
+                <td class="py-3 px-4 font-sans font-medium text-rose-600 dark:text-rose-400">Signed Addition</td>
+                <td class="py-3 px-4">0b0101 (+5)</td>
+                <td class="py-3 px-4">0b0110 (+6)</td>
+                <td class="py-3 px-4 font-bold text-rose-600 dark:text-rose-400">1011</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-xs badge-overflow-true">True</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-rose-700 dark:text-rose-300 leading-normal">
+                  <strong>💥 บวก+บวก ได้ลบ!</strong> $(+5) + (+6) = +11$ เกินขอบบน $(+7)$ ค่าล้นวนไปติดลบเป็น <code>1011</code> (ซึ่งคือ -5) และ Carry in เข้าบิต MSB = 1 แต่ Carry out จาก MSB = 0 ($C_{in} \neq C_{out}$)
+                </td>
+              </tr>
+              <!-- 1.4 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.4</td>
+                <td class="py-3 px-4 font-sans font-medium">Unsigned Addition</td>
+                <td class="py-3 px-4">0b0101 (5)</td>
+                <td class="py-3 px-4">0b0110 (6)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">1011</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $5 + 6 = 11$ ใน Unsigned ยังไม่เกิน 15 และไม่มี Carry out หลุด 4 บิต ($C_{out}=0$) จึงไม่เกิด Overflow
+                </td>
+              </tr>
+              <!-- 1.5 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.5</td>
+                <td class="py-3 px-4 font-sans font-medium">Signed Addition</td>
+                <td class="py-3 px-4">0b1111 (-1)</td>
+                <td class="py-3 px-4">0b1011 (-5)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">1010</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $(-1) + (-5) = -6$ ค่า $-6$ อยู่ในช่วง $[-8, 7]$ พอดี (ใน 4 บิตคือ <code>1010</code>) ลบ+ลบ ได้ลบ (MSB=1) และ $C_{in}=1, C_{out}=1$ ($1 \oplus 1 = 0$) ไม่เกิด Overflow
+                </td>
+              </tr>
+              <!-- 1.6 -->
+              <tr class="hover:bg-rose-50/50 dark:hover:bg-rose-950/20 bg-rose-50/20 dark:bg-rose-950/10">
+                <td class="py-3 px-4 font-bold text-rose-600 dark:text-rose-400">1.6</td>
+                <td class="py-3 px-4 font-sans font-medium text-rose-600 dark:text-rose-400">Signed Addition</td>
+                <td class="py-3 px-4">0b1001 (-7)</td>
+                <td class="py-3 px-4">0b1011 (-5)</td>
+                <td class="py-3 px-4 font-bold text-rose-600 dark:text-rose-400">0100</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-xs badge-overflow-true">True</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-rose-700 dark:text-rose-300 leading-normal">
+                  <strong>💥 ลบ+ลบ ได้บวก!</strong> $(-7) + (-5) = -12$ ต่ำกว่าขอบล่าง $(-8)$ ผลบวก 5 บิตคือ <code>10100</code> ตัดเหลือ 4 บิตคือ <code>0100</code> (+4) ลบ+ลบได้บวก และ $C_{in}=0, C_{out}=1$ ($0 \oplus 1 = 1$)
+                </td>
+              </tr>
+              <!-- 1.7 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.7</td>
+                <td class="py-3 px-4 font-sans font-medium">Signed Addition</td>
+                <td class="py-3 px-4">0b1001 (-7)</td>
+                <td class="py-3 px-4">0b0011 (+3)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">1100</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $(-7) + (+3) = -4$ บวกต่างเครื่องหมายไม่มีวันเกิด Signed Overflow ผลลัพธ์ <code>1100</code> แทนค่า -4 ถูกต้อง
+                </td>
+              </tr>
+              <!-- 1.8 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">1.8</td>
+                <td class="py-3 px-4 font-sans font-medium">Signed Addition</td>
+                <td class="py-3 px-4">0b0111 (+7)</td>
+                <td class="py-3 px-4">0b1000 (-8)</td>
+                <td class="py-3 px-4 font-bold text-blue-600 dark:text-blue-400">1111</td>
+                <td class="py-3 px-4 text-center"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-bold text-xs">False</span></td>
+                <td class="py-3 px-4 font-sans text-xs text-slate-600 dark:text-slate-400 leading-normal">
+                  $(+7) + (-8) = -1$ บวกต่างเครื่องหมายไม่เกิด Overflow ผลลัพธ์ <code>1111</code> แทนค่า -1 พอดี
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 2 (ALU CONTROL LOGIC) -->
+    <!-- ========================================== -->
+    <section id="content-q2" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300">
+            คำถามที่ 2 (10 คะแนน)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            ALU Control Logic & Circuit Analysis
+          </h2>
+        </div>
+      </div>
+
+      <!-- Diagram Showcase & Theory -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <!-- Images from Exam -->
+        <div class="space-y-4">
+          <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="text-xs font-semibold text-slate-500 block mb-2">รูปที่ 1: โครงสร้างภายใน ALU (32-bit ALU, 1-bit LSBs, 1-bit MSB)</span>
+            <div class="overflow-hidden rounded-xl bg-white p-2">
+              <img src="images/page_3_img_1_Im2.png" alt="ALU Internal Structure" class="w-full h-auto cursor-pointer hover:scale-[1.02] transition" onclick="zoomImage(this.src, 'รูปที่ 1: ALU Internal Structure')">
+            </div>
+            <p class="text-xs text-slate-400 mt-2 text-center"><i class="fa-solid fa-magnifying-glass-plus"></i> คลิกที่รูปเพื่อขยายใหญ่</p>
+          </div>
+
+          <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="text-xs font-semibold text-slate-500 block mb-2">ตารางที่ 1 (ต้นฉบับในข้อสอบ): ตารางตรรกะสัญญาณควบคุม ALU</span>
+            <div class="overflow-hidden rounded-xl bg-white p-2">
+              <img src="images/page_2_img_1_Im1.png" alt="ALU Control Table" class="w-full h-auto cursor-pointer hover:scale-[1.02] transition" onclick="zoomImage(this.src, 'ตารางที่ 1: ALU Control Table')">
+            </div>
+          </div>
+        </div>
+
+        <!-- Theory Breakdown -->
+        <div class="space-y-5">
+          <div class="glass-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-emerald-500"></i> ทำความเข้าใจโครงสร้าง 1-bit ALU
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              ในรูปที่ 1 สังเกตว่าแต่ละบิตของ ALU มีส่วนประกอบสำคัญดังนี้:
+            </p>
+            <div class="space-y-3 text-sm">
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-emerald-600 dark:text-emerald-400">1. มัลติเพล็กเซอร์ (MUX) ที่อินพุต:</strong>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  • <code>Ainv</code>: เลือกว่าจะใช้ค่า $a$ (เมื่อ 0) หรือกลับบิตเป็น $\bar{a}$ (เมื่อ 1)<br>
+                  • <code>Binv</code>: เลือกว่าจะใช้ค่า $b$ (เมื่อ 0) หรือกลับบิตเป็น $\bar{b}$ (เมื่อ 1)
+                </p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-emerald-600 dark:text-emerald-400">2. ตัวเลือกการคำนวณ (Operation 2 บิต):</strong>
+                <div class="grid grid-cols-2 gap-2 mt-2 font-mono text-xs">
+                  <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <strong>Op = 00:</strong> ช่อง 0 คือ <strong>AND</strong>
+                  </div>
+                  <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <strong>Op = 01:</strong> ช่อง 1 คือ <strong>OR</strong>
+                  </div>
+                  <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <strong>Op = 10:</strong> ช่อง 2 คือ <strong>Adder (+)</strong>
+                  </div>
+                  <div class="p-2 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                    <strong>Op = 11:</strong> ช่อง 3 คือ <strong>Less</strong> (สำหรับ slt)
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-200 text-xs leading-relaxed">
+                <strong>💡 เคล็ดลับสูตรลับที่ออกสอบบ่อย:</strong><br>
+                • <strong>การลบ (Subtract: A - B):</strong> ใช้สูตร Two's complement คือ $A + \bar{B} + 1$<br>
+                $\implies$ <code>Binv = 1</code>, <code>CarryIn = 1</code>, <code>Operation = 10 (Add)</code><br>
+                • <strong>การทำ NOR ($\overline{A \lor B}$):</strong> ตามกฎของเดอมอร์แกน (De Morgan's Laws):<br>
+                $\overline{A \lor B} = \bar{A} \land \bar{B}$<br>
+                $\implies$ กลับบิตทั้งคู่ <code>Ainv = 1</code>, <code>Binv = 1</code> แล้วนำเข้าเกต <strong>AND (Operation = 00)</strong>!<br>
+                • <strong>การทำ slt (Set on Less Than):</strong> ให้ลบ $A - B$ (Binv=1, CarryIn=1) แล้วบิต Set จาก MSB จะถูกโยงมาเข้าช่อง Less (Op=11) ของบิตที่ 0!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete Solution Table for Question 2 -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-check text-emerald-600"></i> เฉลยตารางสัญญาณควบคุม ALU (ตารางที่ 1 ฉบับสมบูรณ์)
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-center border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 font-bold">
+                <th colspan="2" class="py-2.5 px-4 bg-slate-200 dark:bg-slate-700">Input</th>
+                <th rowspan="2" class="py-2.5 px-4">ข้อ</th>
+                <th rowspan="2" class="py-2.5 px-4 text-left">Goal (คำสั่งที่ต้องการ)</th>
+                <th colspan="4" class="py-2.5 px-4 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">Output (สัญญาณควบคุม)</th>
+                <th rowspan="2" class="py-2.5 px-4 text-left">เหตุผลและคำอธิบาย</th>
+              </tr>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 font-mono text-xs">
+                <th class="py-2 px-3">ALUOp (2b)</th>
+                <th class="py-2 px-3">Funct (6b)</th>
+                <th class="py-2 px-3 text-emerald-700 dark:text-emerald-400">Ainv</th>
+                <th class="py-2 px-3 text-emerald-700 dark:text-emerald-400">Binv</th>
+                <th class="py-2 px-3 text-emerald-700 dark:text-emerald-400">CarryIn</th>
+                <th class="py-2 px-3 text-emerald-700 dark:text-emerald-400">Operation (2b)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-mono">
+              <!-- 2.1 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>00</td><td>xxxxxx</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.1)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">add: A + B (เช่น lw/sw)</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">10</td>
+                <td class="text-left font-sans text-xs text-slate-500">บวกปกติ ไม่กลับบิต ไม่ทด ใช้ Adder (Op 10)</td>
+              </tr>
+              <!-- 2.2 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>01</td><td>xxxxxx</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.2)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">subtract: A - B (เช่น beq)</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">1</td><td class="font-bold text-blue-600">1</td><td class="font-bold text-blue-600">10</td>
+                <td class="text-left font-sans text-xs text-slate-500">ลบคือ $A+\bar{B}+1 \implies$ Binv=1, CarryIn=1, Op 10</td>
+              </tr>
+              <!-- 2.3 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>10</td><td>100000</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.3)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">add: A + B (R-type add)</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">10</td>
+                <td class="text-left font-sans text-xs text-slate-500">R-type คำสั่ง add ใช้ Adder (Op 10)</td>
+              </tr>
+              <!-- 2.4 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>10</td><td>100010</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.4)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">subtract: A - B (R-type sub)</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">1</td><td class="font-bold text-blue-600">1</td><td class="font-bold text-blue-600">10</td>
+                <td class="text-left font-sans text-xs text-slate-500">R-type คำสั่ง sub กลับบิต B และบวก 1 ด้วย CarryIn</td>
+              </tr>
+              <!-- 2.5 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>10</td><td>100100</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.5)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">AND: A & B</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-slate-400">0 (หรือ x)</td><td class="font-bold text-blue-600">00</td>
+                <td class="text-left font-sans text-xs text-slate-500">เลือกช่องเกต AND (Op 00), CarryIn เป็น 0 หรือ x</td>
+              </tr>
+              <!-- 2.6 -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td>10</td><td>100101</td><td class="font-bold text-slate-900 dark:text-slate-100">(2.6)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">OR: A | B</td>
+                <td class="font-bold text-blue-600">0</td><td class="font-bold text-blue-600">0</td><td class="font-bold text-slate-400">0 (หรือ x)</td><td class="font-bold text-blue-600">01</td>
+                <td class="text-left font-sans text-xs text-slate-500">เลือกช่องเกต OR (Op 01), CarryIn เป็น 0 หรือ x</td>
+              </tr>
+              <!-- 2.7 -->
+              <tr class="hover:bg-emerald-50 dark:hover:bg-emerald-950/20 bg-emerald-50/20 dark:bg-emerald-950/10">
+                <td>10</td><td>100111</td><td class="font-bold text-emerald-600 dark:text-emerald-400">(2.7)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">NOR: ~(A | B)</td>
+                <td class="font-bold text-emerald-600">1</td><td class="font-bold text-emerald-600">1</td><td class="font-bold text-slate-400">0 (หรือ x)</td><td class="font-bold text-emerald-600">00</td>
+                <td class="text-left font-sans text-xs text-emerald-700 dark:text-emerald-300"><strong>ไฮไลต์! De Morgan:</strong> $\bar{A} \cdot \bar{B} \implies$ Ainv=1, Binv=1 แล้วเลือก AND (00)</td>
+              </tr>
+              <!-- 2.8 -->
+              <tr class="hover:bg-purple-50 dark:hover:bg-purple-950/20 bg-purple-50/20 dark:bg-purple-950/10">
+                <td>10</td><td>101010</td><td class="font-bold text-purple-600 dark:text-purple-400">(2.8)</td>
+                <td class="text-left font-sans font-semibold text-rose-500">slt: A &lt; B ? 1 : 0</td>
+                <td class="font-bold text-purple-600">0</td><td class="font-bold text-purple-600">1</td><td class="font-bold text-purple-600">1</td><td class="font-bold text-purple-600">11</td>
+                <td class="text-left font-sans text-xs text-purple-700 dark:text-purple-300">ตั้งลบ (Binv=1, CarryIn=1) แล้วเลือกช่อง Less (Op 11) เพื่อรับค่า Set</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 3 (MULTICYCLE 3-STATE) -->
+    <!-- ========================================== -->
+    <section id="content-q3" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300">
+            คำถามที่ 3 (10 คะแนน)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Multicycle Machine & 3-State Control Logic
+          </h2>
+        </div>
+      </div>
+
+      <!-- Datapath Image & Explanation -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-diagram-project text-purple-500"></i> แผนภาพสถาปัตยกรรม Multicycle Machine (รูปที่ 2)
+        </h3>
+        <div class="overflow-hidden rounded-xl bg-white p-3 border border-slate-200 dark:border-slate-700">
+          <img src="images/page_4_img_1_Im4.png" alt="Multicycle Machine Datapath" class="w-full max-h-[480px] object-contain mx-auto cursor-pointer hover:scale-[1.01] transition" onclick="zoomImage(this.src, 'รูปที่ 2: Multicycle Machine Datapath')">
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 text-center">
+          <i class="fa-solid fa-circle-info"></i> ใน 3-state machine แต่ละคำสั่งจะใช้เวลาไม่เกิน 3 รอบนาฬิกา (State 0, State 1, และ State 2)
+        </p>
+      </div>
+
+      <!-- State Function Breakdown (Table 3) -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-list-ol text-purple-600"></i> เฉลยตารางที่ 3: การทำงานและสัญญาณควบคุมในแต่ละ Step
+          </h3>
+          <span class="text-xs px-2.5 py-1 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-semibold">
+            เติมส่วนที่ขาดหายไป (?)
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 font-bold">
+                <th class="py-3 px-3">Step</th>
+                <th class="py-3 px-3">Jump: j</th>
+                <th class="py-3 px-3">Branch: beq</th>
+                <th class="py-3 px-3">R-type</th>
+                <th class="py-3 px-3">Load: lw</th>
+                <th class="py-3 px-3">Store: sw</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 align-top font-mono">
+              <!-- Step 0 -->
+              <tr class="bg-slate-50/60 dark:bg-slate-900/40">
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100 font-sans">
+                  <span class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs">0</span>
+                  <span class="text-[10px] text-slate-400 block mt-1">Fetch</span>
+                </td>
+                <td colspan="5" class="py-3 px-3">
+                  <div class="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+                    <strong>การทำงาน:</strong> <code>IR &lt;= Mem[PC]; PC &lt;= PC + 4</code><br>
+                    <strong>สัญญาณ:</strong> <code>IorD=0, MemRead=1, IRWrite=1, ALUSrcA=0, ALUSrcB=01, ALUOp=00, PCSource=00, PCWrite=1</code>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Step 1 -->
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100 font-sans">
+                  <span class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center text-xs">1</span>
+                  <span class="text-[10px] text-slate-400 block mt-1">Decode / Ex</span>
+                </td>
+                <td class="py-3 px-3">
+                  <code>PC &lt;= [PC[31:28], IR[25:0], 00]</code><br>
+                  <span class="text-blue-600 font-semibold">PCSource=10, PCWrite=1</span><br>
+                  <span class="text-[10px] text-slate-400 font-sans">(เสร็จสิ้นคำสั่ง)</span>
+                </td>
+                <td class="py-3 px-3">
+                  <code>ALUOut &lt;= PC + (signext(IR[15:0]) &lt;&lt; 2)</code><br>
+                  <span class="text-blue-600 font-semibold">ALUSrcA=0, ALUSrcB=11, ALUOp=00</span>
+                </td>
+                <td class="py-3 px-3">
+                  <code>ALUOut &lt;= A op B</code><br>
+                  <span class="text-blue-600 font-semibold">ALUSrcA=1, ALUSrcB=00, ALUOp=10</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/50 dark:bg-amber-950/20">
+                  <code>ALUOut &lt;= A + signext</code><br>
+                  <span class="text-amber-600 dark:text-amber-400 font-bold">ALUSrcA=1, ALUSrcB=10, ALUOp=00</span>
+                  <span class="block text-[10px] text-amber-700 font-sans mt-0.5">*(เติมส่วนที่หายไป)*</span>
+                </td>
+                <td class="py-3 px-3 bg-amber-50/50 dark:bg-amber-950/20">
+                  <span class="text-amber-600 dark:text-amber-400 font-bold">ALUOut &lt;= A + signext</span><br>
+                  <span class="text-amber-600 dark:text-amber-400 font-bold">ALUSrcA=1, ALUSrcB=10, ALUOp=00</span>
+                  <span class="block text-[10px] text-amber-700 font-sans mt-0.5">*(เติมส่วนที่หายไป)*</span>
+                </td>
+              </tr>
+
+              <!-- Step 2 -->
+              <tr class="bg-purple-50/30 dark:bg-purple-950/20">
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-slate-100 font-sans">
+                  <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 flex items-center justify-center text-xs">2</span>
+                  <span class="text-[10px] text-slate-400 block mt-1">Complete</span>
+                </td>
+                <td class="py-3 px-3 text-slate-400 font-sans italic">
+                  - (จบตั้งแต่ step 1)
+                </td>
+                <td class="py-3 px-3">
+                  <code>if(A==B) PC &lt;= ALUOut</code><br>
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">ALUSrcA=1, ALUSrcB=00, ALUOp=01, PCSource=01, PCWriteCond=1</span>
+                </td>
+                <td class="py-3 px-3">
+                  <code>Reg[rd] &lt;= ALUOut</code><br>
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">RegDst=1, RegWrite=1, MemtoReg=0</span>
+                </td>
+                <td class="py-3 px-3">
+                  <code>Reg[rt] &lt;= Mem[ALUOut]</code><br>
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">IorD=1, MemRead=1, MemtoReg=1, RegDst=0, RegWrite=1</span>
+                </td>
+                <td class="py-3 px-3">
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">Mem[ALUOut] &lt;= B</span><br>
+                  <span class="text-purple-600 dark:text-purple-400 font-bold">IorD=1, MemWrite=1</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Main Control Signal Table (Table 4) -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-table text-indigo-600"></i> เฉลยตารางที่ 4: ตารางสถานะสัญญาณควบคุมหลัก (Main Control)
+          </h3>
+          <p class="text-xs text-slate-500 mt-1">
+            *ตามเงื่อนไขโจทย์: อุปกรณ์ทุกตัวเป็น active high, ใช้เลข <code>0</code> แทน "don't care" สำหรับสัญญาณควบคุม, และ <code>xxxxxx</code> สำหรับ Opcode ที่ยังไม่ระบุคำสั่ง
+          </p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-center border-collapse text-xs font-mono">
+            <thead>
+              <tr class="bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-b border-slate-300 dark:border-slate-700 font-bold">
+                <th class="py-2.5 px-2">State</th>
+                <th class="py-2.5 px-2">Opcode</th>
+                <th class="py-2.5 px-2 text-blue-600">PCWrite</th>
+                <th class="py-2.5 px-2 text-blue-600">PCWriteCond</th>
+                <th class="py-2.5 px-2 text-indigo-600">MemWrite</th>
+                <th class="py-2.5 px-2 text-indigo-600">MemRead</th>
+                <th class="py-2.5 px-2 text-indigo-600">IRWrite</th>
+                <th class="py-2.5 px-2 text-emerald-600">RegWrite</th>
+                <th class="py-2.5 px-2 text-blue-600">PCSource</th>
+                <th class="py-2.5 px-2 text-indigo-600">IorD</th>
+                <th class="py-2.5 px-2 text-emerald-600">MemtoReg</th>
+                <th class="py-2.5 px-2 text-emerald-600">RegDst</th>
+                <th class="py-2.5 px-2 text-amber-600">ALUOp</th>
+                <th class="py-2.5 px-2 text-amber-600">ALUSrcA</th>
+                <th class="py-2.5 px-2 text-amber-600">ALUSrcB</th>
+                <th class="py-2.5 px-2 font-bold bg-slate-300 dark:bg-slate-700">Next state</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <!-- State 0 -->
+              <tr class="bg-blue-50/40 dark:bg-blue-950/20 font-semibold">
+                <td class="py-2 px-2 font-bold text-blue-600">0</td>
+                <td class="py-2 px-2 text-slate-500">xxxxxx</td>
+                <td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>00</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>01</td>
+                <td class="font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">1</td>
+              </tr>
+              <!-- State 1 R-type -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-2 px-2 font-bold">1</td>
+                <td>000000 <span class="text-[10px] text-slate-400 font-sans">(R-type)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>0</td><td>0</td><td>10</td><td>1</td><td>00</td>
+                <td class="font-bold bg-slate-100 dark:bg-slate-800">2</td>
+              </tr>
+              <!-- State 1 j -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-2 px-2 font-bold">1</td>
+                <td>000010 <span class="text-[10px] text-slate-400 font-sans">(j)</span></td>
+                <td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>00</td>
+                <td class="font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">0</td>
+              </tr>
+              <!-- State 1 beq -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-2 px-2 font-bold">1</td>
+                <td>000100 <span class="text-[10px] text-slate-400 font-sans">(beq)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>11</td>
+                <td class="font-bold bg-slate-100 dark:bg-slate-800">2</td>
+              </tr>
+              <!-- State 1 lw -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-2 px-2 font-bold">1</td>
+                <td>100011 <span class="text-[10px] text-slate-400 font-sans">(lw)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>0</td><td>0</td><td>00</td><td>1</td><td>10</td>
+                <td class="font-bold bg-slate-100 dark:bg-slate-800">2</td>
+              </tr>
+              <!-- State 1 sw -->
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="py-2 px-2 font-bold">1</td>
+                <td>101011 <span class="text-[10px] text-slate-400 font-sans">(sw)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>00</td><td>0</td><td>0</td><td>0</td><td>00</td><td>1</td><td>10</td>
+                <td class="font-bold bg-slate-100 dark:bg-slate-800">2</td>
+              </tr>
+              <!-- State 2 R-type -->
+              <tr class="bg-purple-50/30 dark:bg-purple-950/20">
+                <td class="py-2 px-2 font-bold text-purple-600">2</td>
+                <td>000000 <span class="text-[10px] text-slate-400 font-sans">(R-type)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>00</td><td>0</td><td>0</td><td>1</td><td>00</td><td>0</td><td>00</td>
+                <td class="font-bold bg-slate-200 dark:bg-slate-700">0</td>
+              </tr>
+              <!-- State 2 beq -->
+              <tr class="bg-purple-50/30 dark:bg-purple-950/20">
+                <td class="py-2 px-2 font-bold text-purple-600">2</td>
+                <td>000100 <span class="text-[10px] text-slate-400 font-sans">(beq)</span></td>
+                <td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>01</td><td>0</td><td>0</td><td>0</td><td>01</td><td>1</td><td>00</td>
+                <td class="font-bold bg-slate-200 dark:bg-slate-700">0</td>
+              </tr>
+              <!-- State 2 lw -->
+              <tr class="bg-purple-50/30 dark:bg-purple-950/20">
+                <td class="py-2 px-2 font-bold text-purple-600">2</td>
+                <td>100011 <span class="text-[10px] text-slate-400 font-sans">(lw)</span></td>
+                <td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>00</td><td>1</td><td>1</td><td>0</td><td>00</td><td>0</td><td>00</td>
+                <td class="font-bold bg-slate-200 dark:bg-slate-700">0</td>
+              </tr>
+              <!-- State 2 sw -->
+              <tr class="bg-purple-50/30 dark:bg-purple-950/20">
+                <td class="py-2 px-2 font-bold text-purple-600">2</td>
+                <td>101011 <span class="text-[10px] text-slate-400 font-sans">(sw)</span></td>
+                <td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>00</td><td>1</td><td>0</td><td>0</td><td>00</td><td>0</td><td>00</td>
+                <td class="font-bold bg-slate-200 dark:bg-slate-700">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 4 (SRL DATAPATH & BARREL SHIFTER) -->
+    <!-- ========================================== -->
+    <section id="content-q4" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300">
+            คำถามที่ 4 (10 คะแนน)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Datapath Connection for SRL & Barrel Shifter
+          </h2>
+        </div>
+      </div>
+
+      <!-- Theory Box for SRL -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-5 border-l-4 border-l-amber-500">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-graduation-cap text-amber-500"></i> ทฤษฎีคำสั่ง <code>srl</code> (Shift Right Logical) ในสถาปัตยกรรม MIPS
+        </h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          รูปแบบคำสั่ง: <code>srl $rd, $rt, shamt</code><br>
+          เป็นคำสั่งประเภท <strong>R-type</strong> ที่มีความพิเศษที่สุดในกลุ่ม เพราะ:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="font-bold text-blue-600 block mb-1">1. อินพุตข้อมูลที่จะ Shift มาจาก rt:</span>
+            ไม่ใช่ <code>rs</code>! ใน MIPS สถาปัตยกรรมกำหนดให้บิต <code>[20:16]</code> ซึ่งเป็นฟิลด์ <code>rt</code> เป็นตัวเก็บค่าตั้งต้นที่จะนำมาเลื่อนบิต ส่วน <code>rs [25:21]</code> จะไม่ได้ใช้งาน (เป็น 00000)
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="font-bold text-purple-600 block mb-1">2. จำนวนบิตที่ต้องการเลื่อนมาจาก shamt:</span>
+            ฟิลด์ <code>shamt [10:6]</code> มีขนาด 5 บิต ($2^5 = 32$) ซึ่งตรงกับสัญญาณควบคุม <code>s4, s3, s2, s1, s0</code> ของ Barrel Shifter แบบ 1 ต่อ 1 พอดี
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="font-bold text-emerald-600 block mb-1">3. รีจิสเตอร์ปลายทางคือ rd:</span>
+            ฟิลด์ <code>rd [15:11]</code> เป็นตัวชี้ว่าจะนำผลลัพธ์จาก Barrel Shifter ไปบันทึกลงรีจิสเตอร์ตัวใดใน Register File โดยเปิดสัญญาณ <code>RegWrite = 1</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagram Comparison (Before vs After Solution) -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-bezier-curve text-amber-500"></i> แผนภาพการเชื่อมต่อสายสัญญาณ (Datapath Solution)
+            </h3>
+            <p class="text-xs text-slate-500">เปรียบเทียบรูปว่างในข้อสอบ กับภาพเฉลยการเดินสายสัญญาณที่ถูกต้อง 100%</p>
+          </div>
+          <div class="inline-flex rounded-xl p-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+            <button id="btn-show-solved-q4" onclick="toggleQ4Image(true)" class="px-3 py-1.5 rounded-lg font-bold bg-white dark:bg-amber-600 text-amber-600 dark:text-white shadow-sm transition">
+              <i class="fa-solid fa-check"></i> ดูรูปเฉลยเดินสาย
+            </button>
+            <button id="btn-show-blank-q4" onclick="toggleQ4Image(false)" class="px-3 py-1.5 rounded-lg font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 transition">
+              <i class="fa-solid fa-file-lines"></i> ดูรูปโจทย์เปล่า
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl bg-white p-3 border border-slate-200 dark:border-slate-700 flex justify-center">
+          <img id="q4-active-img" src="images/q4_srl_wiring_solution.png" alt="Q4 Solution Datapath" class="max-w-full h-auto cursor-pointer hover:scale-[1.01] transition rounded-lg" onclick="zoomImage(this.src, 'รูปที่ 3: แผนผังการต่อสายสัญญาณคำสั่ง SRL')">
+        </div>
+
+        <!-- Wire-by-wire detailed breakdown -->
+        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm">รายละเอียดการโยงสายสัญญาณทั้ง 6 จุด (ต้องระบุบิตชัดเจน):</h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 rounded-xl border border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">1</span>
+              <div>
+                <strong class="text-blue-700 dark:text-blue-300">IR[20:16] (rt) $\to$ Read register 1 (5 บิต):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">ส่งหมายเลขรีจิสเตอร์ต้นทาง 5 บิตไปยังช่องอ่านของ Register File</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl border border-orange-200 dark:border-orange-900 bg-orange-50/50 dark:bg-orange-950/20 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">2</span>
+              <div>
+                <strong class="text-orange-700 dark:text-orange-300">Read data 1 $\to$ Data in ของ Barrel Shifter (32 บิต):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">ส่งข้อมูล 32 บิตที่อ่านได้จาก Register File เข้าไปเป็นตัวตั้งใน Barrel Shifter</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl border border-purple-200 dark:border-purple-900 bg-purple-50/50 dark:bg-purple-950/20 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">3</span>
+              <div>
+                <strong class="text-purple-700 dark:text-purple-300">IR[10:6] (shamt) $\to$ สัญญาณเลือก s0..s4 (5 บิต):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">บิต 6 เข้า s0 (shift 1), บิต 7 เข้า s1 (shift 2), บิต 8 เข้า s2 (shift 4), บิต 9 เข้า s3 (shift 8), บิต 10 เข้า s4 (shift 16)</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">4</span>
+              <div>
+                <strong class="text-emerald-700 dark:text-emerald-300">Data out ของ Barrel Shifter $\to$ Write data (32 บิต):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">นำค่าผลลัพธ์ที่เลื่อนบิตเสร็จแล้ว ส่งกลับไปรอเขียนลง Register File</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl border border-rose-200 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/20 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-rose-500 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">5</span>
+              <div>
+                <strong class="text-rose-700 dark:text-rose-300">IR[15:11] (rd) $\to$ Write register (5 บิต):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">ระบุหมายเลขรีจิสเตอร์ปลายทาง <code>$rd</code> ที่จะเขียนข้อมูลทับ</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-slate-600 text-white font-bold flex items-center justify-center shrink-0 text-[10px]">6</span>
+              <div>
+                <strong class="text-slate-800 dark:text-slate-200">สัญญาณ RegWrite = 1 (Active High):</strong>
+                <p class="text-slate-600 dark:text-slate-400 mt-0.5">เปิดการอนุญาตให้บันทึกข้อมูลลงรีจิสเตอร์</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 5 (5-STAGE PIPELINE) -->
+    <!-- ========================================== -->
+    <section id="content-q5" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-300">
+            คำถามที่ 5 (10 คะแนน - ข้อย่อย 5.1 ถึง 5.10)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            5-Stage Pipeline Timing & Hazard Terminology
+          </h2>
+        </div>
+      </div>
+
+      <!-- Pipeline Timing Diagram from Exam -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-5">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-timeline text-rose-500"></i> แผนภาพการทำงานของ 5-Stage Pipeline (รูปที่ 4)
+        </h3>
+        <div class="overflow-hidden rounded-xl bg-white p-3 border border-slate-200 dark:border-slate-700">
+          <img src="images/page_7_img_1_Im11.png" alt="5-stage pipeline" class="w-full max-h-[350px] object-contain mx-auto cursor-pointer hover:scale-[1.01] transition" onclick="zoomImage(this.src, 'รูปที่ 4: 5-Stage Pipeline Diagram')">
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
+          <i class="fa-solid fa-triangle-exclamation"></i> <strong>ข้อสังเกตเรื่องหน่วยในข้อสอบ:</strong> ในโจทย์เขียนว่า <em>"clock rate 1GHz (clock period = 1µs)"</em> ซึ่งทางฟิสิกส์และความเป็นจริง $1\text{ GHz} = 10^9\text{ Hz} \implies \text{period} = 1\text{ ns}$ (ไม่ใช่ $1\mu\text{s}$) ในการเขียนตอบ แนะนำให้ระบุทั้งในแง่ $1\text{ ns}$ ทางทฤษฎี และค่าที่คิดตามเลข $1\mu\text{s}$ ที่โจทย์ให้ เพื่อความรัดกุมและได้คะแนนเต็มแน่นอน!
+        </div>
+      </div>
+
+      <!-- Interactive Pipeline Time Calculator -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-stopwatch text-rose-500"></i> เครื่องคำนวณเวลาการทำงานของ Pipeline (สำหรับข้อ 5.1)
+        </h3>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+            <label class="text-sm font-semibold text-slate-600 dark:text-slate-300">จำนวนคำสั่ง ($N$):</label>
+            <input type="number" id="input-pipe-n" value="10" min="1" max="1000000000" class="w-40 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-sm focus:ring-2 focus:ring-blue-500">
+          </div>
+          <button onclick="calculatePipelineTime()" class="px-4 py-1.5 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition">
+            คำนวณ
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-sm">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="text-xs text-slate-400 font-sans block">สูตรรอบสัญญาณนาฬิกา (Cycles)</span>
+            <span class="text-lg font-bold text-slate-800 dark:text-slate-200" id="calc-pipe-cycles">14 Cycles</span>
+            <span class="text-[10px] text-slate-500 font-sans block mt-1">$k + (N - 1) = 5 + N - 1$</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900">
+            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-sans block">เวลา (คิดจาก 1 GHz = 1 ns)</span>
+            <span class="text-lg font-bold text-emerald-700 dark:text-emerald-300" id="calc-pipe-time-ns">14 ns</span>
+            <span class="text-[10px] text-emerald-600/70 font-sans block mt-1">ตามทฤษฎีฮาร์ดแวร์จริง</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900">
+            <span class="text-xs text-amber-600 dark:text-amber-400 font-sans block">เวลา (คิดตามเลขโจทย์ = 1 µs)</span>
+            <span class="text-lg font-bold text-amber-700 dark:text-amber-300" id="calc-pipe-time-us">14 µs</span>
+            <span class="text-[10px] text-amber-600/70 font-sans block mt-1">ตามข้อความที่พิมพ์ในข้อสอบ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solutions 5.1 to 5.10 Cards -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-blue-600"></i> เฉลยคำถามและ Terminology ครบทั้ง 10 ข้อย่อย (5.1 - 5.10)
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 5.1 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-600 text-sm">ข้อ 5.1: เวลาการทำงาน</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">Calculation</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              สูตร: $\text{Cycles} = 5 + (N - 1)$<br>
+              • <strong>1 คำสั่ง:</strong> 5 cycles = <strong>5 ns</strong> (หรือ $5\,\mu\text{s}$)<br>
+              • <strong>10 คำสั่ง:</strong> $5 + 9 = 14$ cycles = <strong>14 ns</strong> (หรือ $14\,\mu\text{s}$)<br>
+              • <strong>1,000,000 คำสั่ง:</strong> $1,000,004$ cycles = <strong>1,000,004 ns $\approx$ 1.000004 ms</strong> (หรือ 1.000004 s)
+            </p>
+          </div>
+
+          <!-- 5.2 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-600 text-sm">ข้อ 5.2: แย่ง Memory เดียวกัน</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">Structural</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              คำสั่งที่ 1 อ่านข้อมูล (MEM) และคำสั่งที่ 4 อ่านคำสั่ง (IF) จากหน่วยความจำเดียวกันใน clock เดียวกัน เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-bold text-sm">
+              คำตอบ: Structural Hazard (อันตรายเชิงโครงสร้าง)
+            </div>
+          </div>
+
+          <!-- 5.3 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-amber-600 text-sm">ข้อ 5.3: beq ยังไม่รู้ผลแต่ Fetch แล้ว</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300">Control</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              คำสั่งที่ 1 เป็น <code>beq</code> ผลเปรียบเทียบยังไม่ออก แต่คำสั่งที่ 2 ถูก fetch เข้ามาแล้ว อาจเป็นคำสั่งผิด เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold text-sm">
+              คำตอบ: Control Hazard (หรือ Branch Hazard)
+            </div>
+          </div>
+
+          <!-- 5.4 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-purple-600 text-sm">ข้อ 5.4: คำสั่งหลังรอค่าจากคำสั่งหน้า</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300">Data RAW</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              คำสั่งที่ 2 ต้องใช้ <code>$s0</code> ใน clk 4 แต่คำสั่งที่ 1 ยังไม่เขียนลง register จนถึง clk 5 เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 font-bold text-sm">
+              คำตอบ: Data Hazard (หรือ RAW: Read After Write)
+            </div>
+          </div>
+
+          <!-- 5.5 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-emerald-600 text-sm">ข้อ 5.5: เส้นทางลัดส่งข้อมูล</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">Optimization</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              เพิ่มสายส่งข้อมูลจาก EX stage ของคำสั่งที่ 1 ตรงเข้า ALU ของคำสั่งที่ 2 โดยไม่ต้องรอเขียนลง register เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold text-sm">
+              คำตอบ: Forwarding (หรือ Bypassing)
+            </div>
+          </div>
+
+          <!-- 5.6 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-600 text-sm">ข้อ 5.6: lw ตามด้วยคำสั่งที่ใช้ข้อมูลทันที</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">Load-use</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              คำสั่งที่ 1 เป็น <code>lw</code> ข้อมูลจะออกจาก memory ตอนสิ้นสุด clk 4 ทำให้คำสั่งถัดไป Forwarding ใน clk 4 ไม่ทัน เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-bold text-sm">
+              คำตอบ: Load-use Data Hazard (หรือ Load-use Hazard)
+            </div>
+          </div>
+
+          <!-- 5.7 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-cyan-600 text-sm">ข้อ 5.7: การพักคำสั่งหน่วงเวลา</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-cyan-100 dark:bg-cyan-900/60 text-cyan-700 dark:text-cyan-300">Stall</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              วิธีการพักการทำคำสั่งที่ 2 ไว้ 1 รอบนาฬิกา เพื่อรอให้ข้อมูลจาก memory พร้อม เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 font-bold text-sm">
+              คำตอบ: Pipeline Stall (หรือ Stalling / Bubble)
+            </div>
+          </div>
+
+          <!-- 5.8 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-indigo-600 text-sm">ข้อ 5.8: คอมไพเลอร์สลับคำสั่งลด stall</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">Compiler</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              กลไกที่ Compiler สลับลำดับคำสั่งที่ไม่มีผลกระทบต่อ logic มาแทรกเพื่อหลีกเลี่ยงการ stall เรียกว่า:
+            </p>
+            <div class="p-2 rounded bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold text-sm">
+              คำตอบ: Instruction Scheduling (หรือ Code Scheduling / Compiler Scheduling)
+            </div>
+          </div>
+
+          <!-- 5.9 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-emerald-600 text-sm">ข้อ 5.9: Branch Prediction</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300">Prediction</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              เทคนิคการทำนายล่วงหน้าว่าจะกระโดดหรือไม่ (Branch Prediction) ใช้บรรเทาปัญหาใด:
+            </p>
+            <div class="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold text-sm">
+              คำตอบ: Control Hazard (หรือ Branch Hazard)
+            </div>
+          </div>
+
+          <!-- 5.10 -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-600 text-sm">ข้อ 5.10: Memory Hierarchy</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">Memory</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              ลำดับชั้นหน่วยความจำ (L1/L2/L3 Cache) ช่วยลดปัญหาของ pipeline ในเรื่องใด:
+            </p>
+            <div class="p-2 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold text-sm">
+              คำตอบ: Structural Hazard (แยก I-Cache และ D-Cache) และลด Memory Latency Stall
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: QUESTION 6 (PIPELINE CONTROL PROPAGATION) -->
+    <!-- ========================================== -->
+    <section id="content-q6" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-300">
+            คำถามที่ 6 (10 คะแนน - ข้ออภิปรายสั้นๆ)
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Pipeline Control Signal Propagation Mechanism
+          </h2>
+        </div>
+      </div>
+
+      <!-- Datapath Image (Figure 5) -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-5">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-network-wired text-cyan-500"></i> แผนภาพสถาปัตยกรรม Pipeline Machine (รูปที่ 5)
+        </h3>
+        <div class="overflow-hidden rounded-xl bg-white p-3 border border-slate-200 dark:border-slate-700">
+          <img src="images/page_9_img_1_Im12.png" alt="Pipeline machine with control" class="w-full max-h-[420px] object-contain mx-auto cursor-pointer hover:scale-[1.01] transition" onclick="zoomImage(this.src, 'รูปที่ 5: Pipeline Machine Architecture')">
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400 text-center">
+          สังเกตบล็อกสีเขียวอ่อนใน Stage Registers ที่เขียนว่า <strong>EX, MEM, WB</strong> นั่นคือเส้นทางที่สัญญาณควบคุมเดินทางไปด้วย!
+        </p>
+      </div>
+
+      <!-- Core Question & Detailed Written Answer Guide -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">คำถามจากข้อสอบ:</h4>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 italic">
+            "สังเกตว่า หน่วย control ซึ่งเป็นหน่วยที่จ่ายสัญญาณควบคุมอุปกรณ์ต่างๆ มีอยู่ชุดเดียว อยู่ที่ ID stage (ระหว่าง IF/ID register และ ID/EX register ในรูป). อภิปรายสั้นๆ ว่า กลไกอะไรที่ทำให้ stages อื่นๆ หลัง ID stage ได้รับสัญญาณควบคุมที่ถูกต้อง."
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-cyan-50/50 dark:bg-cyan-950/20 border-2 border-cyan-400 dark:border-cyan-800 space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-cyan-500 text-white flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-pen-nib"></i>
+            </span>
+            <h3 class="text-lg font-bold text-cyan-950 dark:text-cyan-200">แนวทางการเขียนตอบให้ได้คะแนนเต็ม 10 คะแนน</h3>
+          </div>
+
+          <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed space-y-3">
+            <p>
+              <strong>1. ชื่อกลไก:</strong> กลไก <strong>Pipelined Control (การส่งผ่านสัญญาณควบคุมควบคู่ไปกับคำสั่งผ่าน Stage Registers)</strong>
+            </p>
+            <p>
+              <strong>2. หลักการทำงาน:</strong>
+              หน่วย Main Control ที่อยู่ที่ ID stage จะทำการถอดรหัส Opcode และสร้างสัญญาณควบคุมของ <em>ทุก Stage ที่เหลือ</em> ออกมาพร้อมกันทั้งหมดในคราวเดียว:
+            </p>
+            <ul class="list-disc pl-6 space-y-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              <li><strong>สัญญาณสำหรับ EX stage:</strong> เช่น <code>ALUOp</code>, <code>ALUSrc</code>, <code>RegDst</code></li>
+              <li><strong>สัญญาณสำหรับ MEM stage:</strong> เช่น <code>Branch</code>, <code>MemRead</code>, <code>MemWrite</code></li>
+              <li><strong>สัญญาณสำหรับ WB stage:</strong> เช่น <code>RegWrite</code>, <code>MemtoReg</code></li>
+            </ul>
+            <p>
+              <strong>3. การเดินทางของสัญญาณ (Propagation Steps):</strong>
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <strong class="text-blue-600 block mb-1">ขั้นที่ 1: ID $\to$ EX</strong>
+                บันทึกสัญญาณทั้งหมด (EX, MEM, WB) ลงใน <code>ID/EX register</code> เมื่อคำสั่งเข้าสู่ EX stage สัญญาณ EX จะถูกดึงไปใช้ ส่วน MEM และ WB จะถูกส่งต่อ
+              </div>
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <strong class="text-purple-600 block mb-1">ขั้นที่ 2: EX $\to$ MEM</strong>
+                สัญญาณ MEM และ WB จะถูกบันทึกลงใน <code>EX/MEM register</code> เมื่อเข้าสู่ MEM stage สัญญาณ MEM จะถูกนำไปควบคุม Data Memory ส่วน WB ส่งต่อไปอีกขั้น
+              </div>
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <strong class="text-emerald-600 block mb-1">ขั้นที่ 3: MEM $\to$ WB</strong>
+                สัญญาณ WB ถูกบันทึกลงใน <code>MEM/WB register</code> และนำไปควบคุมการเปิดให้เขียนลง Register File (<code>RegWrite</code>) และเลือกค่าจาก MUX (<code>MemtoReg</code>)
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+              <strong>สรุปคำตอบ:</strong> สัญญาณควบคุมจะเดินทางไปพร้อมกับข้อมูลคำสั่งนั้นๆ ทีละขั้นตามรอบสัญญาณนาฬิกาผ่าน Stage Registers เสมือนแพ็คเกจข้อมูลที่ติดตัวคำสั่งไป ทำให้เมื่อคำสั่งเดินทางไปถึง stage ใด สัญญาณควบคุมที่เกี่ยวข้องกับคำสั่งนั้นก็เดินทางไปถึง stage นั้นในเวลาเดียวกันอย่างแม่นยำเสมอ
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB: INTERACTIVE PRACTICE QUIZ -->
+    <!-- ========================================== -->
+    <section id="content-quiz" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <span class="px-3 py-1 rounded-md text-xs font-semibold bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300">
+            โหมดประเมินความพร้อม
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            แบบทดสอบทบทวนข้อสอบ (Interactive Quiz)
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="quiz-score-display" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono font-bold text-sm text-slate-700 dark:text-slate-300">
+            คะแนน: 0 / 6
+          </span>
+          <button onclick="resetQuiz()" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i class="fa-solid fa-rotate-left"></i> ทำใหม่
+          </button>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-6">
+        <!-- Quiz questions will be dynamically rendered or laid out here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL FOR IMAGE ZOOM -->
+  <div id="imageModal" class="fixed inset-0 z-50 modal-overlay hidden flex items-center justify-center p-4" onclick="closeImageModal()">
+    <div class="relative max-w-5xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <h4 id="modalTitle" class="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100">ภาพขยาย</h4>
+        <button onclick="closeImageModal()" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-2 overflow-auto flex-1 flex items-center justify-center">
+        <img id="modalImage" src="" alt="Enlarged diagram" class="max-w-full max-h-[75vh] object-contain rounded-lg">
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>198322 สถาปัตยกรรมคอมพิวเตอร์ (Computer Architecture) | สื่อการสอนและเฉลยข้อสอบเชิงโต้ตอบ</p>
+      <p class="mt-1 text-slate-500">จัดทำเพื่อเสริมความเข้าใจทางด้านระบบดิจิทัล ฮาร์ดแวร์ซีพียู และสถาปัตยกรรม MIPS</p>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
